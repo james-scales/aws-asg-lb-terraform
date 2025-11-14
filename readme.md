@@ -25,3 +25,10 @@ curl -O https://raw.githubusercontent.com/aaron-dm-mcdonald/Class7-notes/refs/he
 ### Key Points
 + Subnets
     + The for_each meta‑argument was implemented in the network module for any user to define their preferred network architecture in the root module and the subnets will be grabbed via defined map variable to provide flexibility. While this approach enables modular customization, it introduces additional complexity when subnets are referenced across dependent resources such as NAT Gateways and Route Tables. To mitigate confusion, inline documentation has been added throughout the codebase to clarify the logic behind more intricate configurations.
+
+### Immediate Future Updates
++ Move Network module variables to root module
++ Update root module variables and outputs
++ Add Terraform workflow instructions to Readme
++ Update compute resources to allow for reusability with variables
++ Update LB & ASG .tf files
