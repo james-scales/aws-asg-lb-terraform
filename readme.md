@@ -3,6 +3,7 @@
 
 #### Revision Log
 + 11.13.25 Initial Deployment - VPC network, subnets, security groups, igw, nat gateway, route tables, ec2 in modularized format
++ 11.20.25 Added Launch Template & Target Group resources. Added Load_Balancing Module containing LB & ASG resources. Added LB Security Group rules. Updated resource names to "dev". Added Infrastructure Diagram.
 
 ## Overview
 Currently this is an ongoing project building an AWS networking infrastructure. This is the foundation of what will become a fully functional Load Balancing & Auto-scaling group built out in Terraform. This project will be built out to be a reusable module and the specfic attributes can be revised as needed.  
@@ -14,6 +15,10 @@ Currently this is an ongoing project building an AWS networking infrastructure. 
 4. Have a .gitignore file
 5. Install VS Code and open with your project
 6. Open GitBash in VS Code
+
+### Architecture
+![alt text](aws-infrastructure.png)
+
 
 ### User Data Shell Script
 Example user data script if not available
@@ -31,4 +36,6 @@ curl -O https://raw.githubusercontent.com/aaron-dm-mcdonald/Class7-notes/refs/he
 + Update root module variables and outputs
 + Add Terraform workflow instructions to Readme
 + Update compute resources to allow for reusability with variables
-+ Update LB & ASG .tf files
++ Update LB & ASG .tf files 
++ Convert resource tags into variables
++ Simplify Module resources 

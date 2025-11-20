@@ -2,6 +2,10 @@ variable "name_prefix" {
   description = "Prefix for naming resources"
   type        = string
 }
+variable "terraform_tag" {
+  description = "Tag for Terraform created reources"
+  type        = string
+}
 
 variable "cidr_block" {
   description = "VPC CIDR Block"
