@@ -4,6 +4,7 @@
 #### Revision Log
 + 11.13.25 Initial Deployment - VPC network, subnets, security groups, igw, nat gateway, route tables, ec2 in modularized format
 + 11.20.25 Added Launch Template & Target Group resources. Added Load_Balancing Module containing LB & ASG resources. Added LB Security Group rules. Updated resource names to "dev". Added Infrastructure Diagram.
++ 11.23.25 Updated Variables files in all modules and root module. Added outputs.tf file.
 
 ## Overview
 Currently this is an ongoing project building an AWS networking infrastructure. This is the foundation of what will become a fully functional Load Balancing & Auto-scaling group built out in Terraform. This project will be built out to be a reusable module and the specfic attributes can be revised as needed.  

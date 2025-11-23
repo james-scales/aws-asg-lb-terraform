@@ -1,6 +1,6 @@
 # Load Balancer Resources
 resource "aws_lb" "dev_alb" {
-  name                       = "dev-load-balancer"
+  name                       = var.alb_name
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [var.load_balancer_sg]
@@ -27,13 +27,13 @@ resource "aws_lb_listener" "http" {
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "dev_asg" {
-  name_prefix               = "dev-auto-scaling-group-"
-  min_size                  = 3
-  max_size                  = 9
-  desired_capacity          = 6
+  name_prefix               = var.asg_name
+  min_size                  = var.asg_min_size
+  max_size                  = var.asg_max_size
+  desired_capacity          = var.asg_desired_size
   vpc_zone_identifier       = var.private_subnet_ids
   health_check_type         = "ELB"
-  health_check_grace_period = 300
+  health_check_grace_period = var.asg_hc_grace_period
   force_delete              = true
 
   target_group_arns = [var.aws_lb_target_group]
@@ -78,11 +78,11 @@ resource "aws_autoscaling_group" "dev_asg" {
 
 # Auto Scaling Policy
 resource "aws_autoscaling_policy" "dev_scaling_policy" {
-  name                   = "dev-cpu-target"
+  name                   = var.asg_policy_name
   autoscaling_group_name = aws_autoscaling_group.dev_asg.name
 
   policy_type               = "TargetTrackingScaling"
-  estimated_instance_warmup = 120
+  estimated_instance_warmup = var.asg_policy_instance_warmup
 
   target_tracking_configuration {
     predefined_metric_specification {

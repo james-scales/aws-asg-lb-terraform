@@ -79,7 +79,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.dev.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
+    cidr_block     = var.private_route_cidr
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 
@@ -92,7 +92,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.dev.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.public_route_cidr
     gateway_id = aws_internet_gateway.igw.id
   }
 
@@ -131,13 +131,13 @@ resource "aws_route_table_association" "public" {
   for_each = local.public_subnets
 
   subnet_id = aws_subnet.dev_subnet[each.key].id
-  
+
   route_table_id = aws_route_table.public.id
 }
 
 ###### Security Group ##########
 resource "aws_security_group" "dev_sg" {
-  name        = "Dev SG"
+  name        = var.sg_name
   description = "Allow inbound traffic and all outbound traffic"
   vpc_id      = aws_vpc.dev.id
 
@@ -149,7 +149,7 @@ resource "aws_security_group" "dev_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.dev_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.sg_ssh_cidr_ipv4
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -157,7 +157,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   security_group_id = aws_security_group.dev_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.sg_http_cidr_ipv4
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
@@ -165,13 +165,13 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
 
 resource "aws_vpc_security_group_egress_rule" "egress_rules" {
   security_group_id = aws_security_group.dev_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.egress_cidr_ipv4
   ip_protocol       = "-1"
 }
 ######## Load Balancer Security Group ##############
 
 resource "aws_security_group" "dev_lb_sg" {
-  name        = "Dev LB SG"
+  name        = var.lb_sg_name
   description = "Allow inbound traffic and all outbound traffic"
   vpc_id      = aws_vpc.dev.id
 
@@ -183,7 +183,7 @@ resource "aws_security_group" "dev_lb_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_lb_http" {
   security_group_id = aws_security_group.dev_lb_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.lb_sg_http_cidr_ipv4
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
@@ -191,6 +191,6 @@ resource "aws_vpc_security_group_ingress_rule" "allow_lb_http" {
 
 resource "aws_vpc_security_group_egress_rule" "egress_lb_rules" {
   security_group_id = aws_security_group.dev_lb_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.lb_egress_cidr_ipv4
   ip_protocol       = "-1"
 }

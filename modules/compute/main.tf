@@ -28,7 +28,7 @@ resource "aws_instance" "bastion_host" {
 
 #### Target Group ####
 resource "aws_lb_target_group" "dev_tg" {
-  name        = "dev-target-group"
+  name        = var.target_group_name
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -69,8 +69,8 @@ resource "aws_lb_target_group" "dev_tg" {
 #   value = data.tls_public_key.MyLinuxBox.public_key_openssh
 # }
 resource "aws_launch_template" "dev_lt" {
-  name_prefix   = "dev_LT"
-  image_id      = "ami-0bddb58ec42d165f9"
+  name_prefix   = var.launch_template_name
+  image_id      = var.lt_image_id
   instance_type = var.instance_type
 
   # key_name = "MyLinuxBox"
