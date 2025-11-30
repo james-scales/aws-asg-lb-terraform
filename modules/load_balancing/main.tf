@@ -24,6 +24,19 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+#### SNS Topic ##################
+resource "aws_sns_topic" "asg_updates" {
+  name = "dev-asg-notify-113025"
+}
+
+resource "aws_sns_topic_subscription" "scales_sub_email" {
+  topic_arn = aws_sns_topic.asg_updates.arn
+  protocol  = "email"
+  endpoint  = "jescalesjr1987@gmail.com"
+}
+
+################################################
+
 
 # Auto Scaling Group
 resource "aws_autoscaling_group" "dev_asg" {
@@ -96,4 +109,19 @@ resource "aws_autoscaling_policy" "dev_scaling_policy" {
 resource "aws_autoscaling_attachment" "dev_asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.dev_asg.name
   lb_target_group_arn    = var.aws_lb_target_group
+}
+
+resource "aws_autoscaling_notification" "dev_notifications" {
+  group_names = [
+    aws_autoscaling_group.dev_asg.name,
+  ]
+
+  notifications = [
+    "autoscaling:EC2_INSTANCE_LAUNCH",
+    "autoscaling:EC2_INSTANCE_TERMINATE",
+    "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+    "autoscaling:EC2_INSTANCE_TERMINATE_ERROR",
+  ]
+
+  topic_arn = aws_sns_topic.asg_updates.arn
 }

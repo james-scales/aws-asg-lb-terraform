@@ -9,4 +9,10 @@ terraform {
       version = "~> 6.0"
     }
   }
+  backend "s3" {
+    bucket = "test-bucket"
+    key    = "path/to/key/113025"
+    region = "sa-east-1"
+  }
+
 }
